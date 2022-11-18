@@ -1,5 +1,3 @@
-extern crate rouille;
-
 pub async fn start_server() {
 	println!("Starting server..");
 
