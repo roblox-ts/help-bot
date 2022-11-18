@@ -12,3 +12,4 @@ tokio = { version = "1.21", features = ["full"] }
 twilight-gateway = { default-features = false, features = ["native"], version = "0.14" }
 twilight-http = { default-features = false, features = ["native"], version = "0.14" }
 twilight-model = "0.14"
+rouille = "3.6.1"

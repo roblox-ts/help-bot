@@ -12,6 +12,7 @@ use crate::events::process_event;
 
 mod config;
 mod events;
+mod server;
 
 fn get_env_id<T>(name: &str) -> Result<Id<T>> {
     let env_value = std::env::var(name)?;
@@ -32,6 +33,8 @@ async fn main() -> Result<()> {
         solved_tag_id,
     };
 
+    tokio::spawn(server::start_server());
+
     let client = Arc::new(Client::new(token.to_string()));
 
     let (shard, mut events) = Shard::new(
@@ -39,17 +42,17 @@ async fn main() -> Result<()> {
         Intents::GUILDS | Intents::GUILD_MESSAGES | Intents::MESSAGE_CONTENT,
     );
 
-    println!("Starting..");
+    println!("Starting shard..");
 
     shard.start().await?;
 
-    println!("Connected!");
+    println!("Shard connected!");
 
     while let Some(event) = events.next().await {
         tokio::spawn(process_event(event, config.clone(), client.clone()));
     }
 
-    println!("Disconnected :(");
+    println!("Shard disconnected :(");
 
     Ok(())
 }
