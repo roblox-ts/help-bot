@@ -30,7 +30,9 @@ pub async fn handle(event: MessageCreate, config: &BotConfig, http: Arc<Client>)
 
 	let embeds = [
 		EmbedBuilder::new()
-			.description(format!("[Playground link]({})", trimmed))
+			.title("Playground link")
+			.url(trimmed)
+			.color(0xE2_24_1A)
 			.build(),
 	];
 
