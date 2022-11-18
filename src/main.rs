@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 use anyhow::Result;
 use config::BotConfig;
+use dotenv::dotenv;
 use futures::StreamExt;
 use twilight_gateway::{Intents, Shard};
 use twilight_http::Client;
@@ -22,6 +23,8 @@ fn get_env_id<T>(name: &str) -> Result<Id<T>> {
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    dotenv().ok();
+
     let token = std::env::var("TOKEN")?;
     let help_channel_id = get_env_id("HELP_CHANNEL_ID")?;
     let unsolved_tag_id = get_env_id("UNSOLVED_TAG_ID")?;

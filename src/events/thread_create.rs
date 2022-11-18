@@ -15,8 +15,8 @@ pub async fn handle(event: ThreadCreate, config: &BotConfig, http: Arc<Client>) 
     let mut applied_tags = event.applied_tags.clone().unwrap_or_default();
     applied_tags.push(unsolved_tag_id);
 
-    let thread_name = event.name.clone().unwrap_or(String::from(""));
-    println!("Adding unsolved tag to new thread: \"{}\"", &thread_name);
+    let thread_name = event.name.clone().unwrap_or_default();
+    println!("Adding unsolved tag to new thread: \"{thread_name}\"");
 
     http.update_thread(event.id)
         .applied_tags(Some(&applied_tags))

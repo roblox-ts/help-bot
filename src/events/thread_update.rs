@@ -17,13 +17,13 @@ pub async fn handle(event: ThreadUpdate, config: &BotConfig, http: Arc<Client>) 
     let has_solved = applied_tags.iter().any(|&v| v == solved_tag_id);
     let has_unsolved = applied_tags.iter().any(|&v| v == unsolved_tag_id);
 
-    let thread_name = event.name.clone().unwrap_or(String::from(""));
+    let thread_name = event.name.clone().unwrap_or_default();
 
     if has_solved && has_unsolved {
-        println!("Removing unsolved tag from existing thread: \"{}\"", &thread_name);
+        println!("Removing unsolved tag from existing thread: \"{thread_name}\"");
         applied_tags.retain(|&v| v != unsolved_tag_id);
     } else if !has_solved && !has_unsolved {
-        println!("Adding unsolved tag to existing thread: \"{}\"", &thread_name);
+        println!("Adding unsolved tag to existing thread: \"{thread_name}\"");
         applied_tags.push(unsolved_tag_id);
     } else {
         return;
