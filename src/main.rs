@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use config::BotConfig;
 use dotenv::dotenv;
 use futures::StreamExt;
@@ -15,15 +15,21 @@ mod config;
 mod events;
 mod server;
 
+fn get_env(name: &str) -> Result<String> {
+    std::env::var(name).context(format!(
+        "Unable to find environment variable named \"{name}\"!"
+    ))
+}
+
 fn get_env_id<T>(name: &str) -> Result<Id<T>> {
-    Ok(Id::new(std::env::var(name)?.parse::<u64>()?))
+    Ok(Id::new(get_env(name)?.parse::<u64>()?))
 }
 
 #[tokio::main]
 async fn main() -> Result<()> {
     dotenv().ok();
 
-    let token = std::env::var("TOKEN")?;
+    let token = get_env("TOKEN")?;
 
     let config = BotConfig {
         help_channel_id: get_env_id("HELP_CHANNEL_ID")?,
