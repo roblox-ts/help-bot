@@ -17,7 +17,7 @@ pub async fn handle(event: MessageCreate, http: Arc<Client>) {
     let embeds = [EmbedBuilder::new()
         .title("Playground link")
         .url(content.trim())
-        .description(format!("<@{}>", event.author.id))
+        .description(format!("Posted by <@{}>", event.author.id))
         .color(0xE2_24_1A)
         .build()];
 
