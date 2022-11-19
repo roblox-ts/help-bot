@@ -19,6 +19,7 @@ jobs:
 
     - name: Install Rust
       uses: actions-rs/toolchain@v1
+        toolchain: stable
 
     - name: Build
       run: cargo build --locked --verbose
@@ -33,6 +34,7 @@ jobs:
     - name: Install Rust
       uses: actions-rs/toolchain@v1
       with:
+        toolchain: stable
         components: rustfmt, clippy
 
     - name: Rustfmt
