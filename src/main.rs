@@ -37,6 +37,7 @@ async fn main() -> Result<()> {
         solved_tag_id: get_env_id("SOLVED_TAG_ID")?,
     };
 
+    println!("Starting server..");
     tokio::spawn(server::start_server());
 
     let client = Arc::new(Client::new(token.to_string()));
