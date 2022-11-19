@@ -16,9 +16,7 @@ mod events;
 mod server;
 
 fn get_env_id<T>(name: &str) -> Result<Id<T>> {
-    let env_value = std::env::var(name)?;
-    let parsed_value = env_value.parse::<u64>()?;
-    return Ok(Id::new(parsed_value));
+    Ok(Id::new(std::env::var(name)?.parse::<u64>()?))
 }
 
 #[tokio::main]
@@ -26,14 +24,11 @@ async fn main() -> Result<()> {
     dotenv().ok();
 
     let token = std::env::var("TOKEN")?;
-    let help_channel_id = get_env_id("HELP_CHANNEL_ID")?;
-    let unsolved_tag_id = get_env_id("UNSOLVED_TAG_ID")?;
-    let solved_tag_id = get_env_id("SOLVED_TAG_ID")?;
 
     let config = BotConfig {
-        help_channel_id,
-        unsolved_tag_id,
-        solved_tag_id,
+        help_channel_id: get_env_id("HELP_CHANNEL_ID")?,
+        unsolved_tag_id: get_env_id("UNSOLVED_TAG_ID")?,
+        solved_tag_id: get_env_id("SOLVED_TAG_ID")?,
     };
 
     tokio::spawn(server::start_server());
@@ -52,7 +47,7 @@ async fn main() -> Result<()> {
     println!("Shard connected!");
 
     while let Some(event) = events.next().await {
-        tokio::spawn(process_event(event, config.clone(), client.clone()));
+        tokio::spawn(process_event(event, config, client.clone()));
     }
 
     println!("Shard disconnected :(");
