@@ -19,10 +19,11 @@ jobs:
 
     - name: Install Rust
       uses: actions-rs/toolchain@v1
+      with:
         toolchain: stable
 
     - name: Build
-      run: cargo build --locked --verbose
+      run: cargo build --locked
 
   lint:
     name: Rustfmt and Clippy
