@@ -1,15 +1,12 @@
-use std::sync::Arc;
-
+use crate::events::handle_event;
 use anyhow::{Context, Result};
 use config::BotConfig;
 use dotenv::dotenv;
 use futures::StreamExt;
+use std::sync::Arc;
 use twilight_gateway::{Intents, Shard};
 use twilight_http::Client;
-
 use twilight_model::id::Id;
-
-use crate::events::process_event;
 
 mod config;
 mod events;
@@ -54,7 +51,7 @@ async fn main() -> Result<()> {
     println!("Shard connected!");
 
     while let Some(event) = events.next().await {
-        tokio::spawn(process_event(event, config, client.clone()));
+        tokio::spawn(handle_event(client.clone(), config, event));
     }
 
     println!("Shard disconnected :(");
