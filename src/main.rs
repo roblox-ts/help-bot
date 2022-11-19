@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use anyhow::{Result, Context};
+use anyhow::{Context, Result};
 use config::BotConfig;
 use dotenv::dotenv;
 use futures::StreamExt;
@@ -16,7 +16,9 @@ mod events;
 mod server;
 
 fn get_env(name: &str) -> Result<String> {
-    std::env::var(name).context(format!("Unable to find environment variable named \"{name}\"!"))
+    std::env::var(name).context(format!(
+        "Unable to find environment variable named \"{name}\"!"
+    ))
 }
 
 fn get_env_id<T>(name: &str) -> Result<Id<T>> {
