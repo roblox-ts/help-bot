@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use twilight_http::Client;
 use twilight_model::gateway::payload::incoming::MessageCreate;
-use twilight_util::builder::embed::{EmbedAuthorBuilder, EmbedBuilder};
+use twilight_util::builder::embed::EmbedBuilder;
 use regex::Regex;
 
 const PLAYGROUND_REGEX: &str = r"^\s*https://roblox-ts\.com/playground/#code/[A-Za-z0-9\-\+]+\s*$";
@@ -18,7 +18,7 @@ pub async fn handle(event: MessageCreate, http: Arc<Client>) {
         EmbedBuilder::new()
             .title("Playground link")
             .url(content.trim())
-            .author(EmbedAuthorBuilder::new(&event.author.name).build())
+            .description(format!("<@{}>", event.author.id))
             .color(0xE2_24_1A)
             .build(),
     ];
