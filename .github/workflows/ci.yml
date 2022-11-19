@@ -23,7 +23,7 @@ jobs:
         toolchain: stable
 
     - name: Build
-      run: cargo build --locked --verbose
+      run: cargo build --locked
 
   lint:
     name: Rustfmt and Clippy
