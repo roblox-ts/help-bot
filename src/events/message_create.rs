@@ -30,7 +30,10 @@ pub async fn handle(client: Arc<Client>, event: MessageCreate) -> Result<()> {
     // only delete the original message if we successfully sent an embed
     client.delete_message(event.channel_id, event.id).await?;
 
-    println!("Created embeded playground link for {}", &event.author.name);
+    println!(
+        "Created embedded playground link for {}",
+        &event.author.name
+    );
 
     Ok(())
 }
