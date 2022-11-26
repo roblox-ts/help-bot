@@ -10,10 +10,12 @@ pub async fn handle(client: Arc<Client>, config: &BotConfig, event: ThreadCreate
         return Ok(());
     }
 
-    let unsolved_tag_id = config.unsolved_tag_id;
-
     let mut applied_tags = event.applied_tags.clone().unwrap_or_default();
-    applied_tags.push(unsolved_tag_id);
+    let has_unsolved = applied_tags.iter().any(|&v| v == config.unsolved_tag_id);
+
+    if !has_unsolved {
+        applied_tags.push(config.unsolved_tag_id);
+    }
 
     let thread_name = event.name.clone().unwrap_or_default();
     println!("Adding unsolved tag to new thread: \"{thread_name}\"");
