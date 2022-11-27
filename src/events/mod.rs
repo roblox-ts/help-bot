@@ -1,4 +1,3 @@
-use crate::config::BotConfig;
 use anyhow::Context;
 use std::sync::Arc;
 use twilight_gateway::Event;
@@ -8,11 +7,11 @@ mod message_create;
 mod thread_create;
 mod thread_update;
 
-pub async fn handle_event(client: Arc<Client>, config: BotConfig, event: Event) {
+pub async fn handle_event(client: Arc<Client>, event: Event) {
     match event {
         Event::MessageCreate(e) => message_create::handle(client, *e).await,
-        Event::ThreadCreate(e) => thread_create::handle(client, &config, *e).await,
-        Event::ThreadUpdate(e) => thread_update::handle(client, &config, *e).await,
+        Event::ThreadCreate(e) => thread_create::handle(client, *e).await,
+        Event::ThreadUpdate(e) => thread_update::handle(client, *e).await,
         _ => Ok(()),
     }
     .context("Event handler failed!")

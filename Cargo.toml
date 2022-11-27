@@ -16,3 +16,4 @@ twilight-model = "0.14"
 twilight-util = { default-features = false, features = ["builder"], version = "0.14" }
 regex = "1.7.0"
 hyper = { version = "0.14", features = ["full"] }
+lazy_static = "1.4.0"
