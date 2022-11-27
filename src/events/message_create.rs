@@ -1,17 +1,20 @@
 use anyhow::Result;
+use lazy_static::lazy_static;
 use regex::Regex;
 use std::sync::Arc;
 use twilight_http::Client;
 use twilight_model::gateway::payload::incoming::MessageCreate;
 use twilight_util::builder::embed::EmbedBuilder;
 
-const PLAYGROUND_REGEX: &str = r"^\s*https://roblox-ts\.com/playground/#code/[A-Za-z0-9\-\+]+\s*$";
+lazy_static! {
+    static ref PLAYGROUND_REGEX: Regex =
+        Regex::new(r"^\s*https://roblox-ts\.com/playground/#code/[A-Za-z0-9\-\+]+\s*$").unwrap();
+}
 
 pub async fn handle(client: Arc<Client>, event: MessageCreate) -> Result<()> {
     let content = &event.content;
 
-    let re = Regex::new(PLAYGROUND_REGEX).unwrap();
-    if !re.is_match(content) {
+    if !PLAYGROUND_REGEX.is_match(content) {
         return Ok(());
     }
 
