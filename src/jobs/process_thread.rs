@@ -1,9 +1,8 @@
+use crate::config;
 use anyhow::Result;
 use std::{future::IntoFuture, sync::Arc};
 use twilight_http::Client;
 use twilight_model::channel::Channel;
-
-use crate::config;
 
 pub async fn process_thread(client: Arc<Client>, channel: Channel) -> Result<()> {
     if Some(*config::HELP_CHANNEL_ID) != channel.parent_id {
