@@ -17,9 +17,18 @@ fn get_env_id<T>(name: &str) -> Id<T> {
     Id::new(get_env(name).parse::<u64>().unwrap())
 }
 
+pub struct BotConfig {
+    pub token: String,
+    pub help_channel_id: Id<ChannelMarker>,
+    pub unsolved_tag_id: Id<TagMarker>,
+    pub solved_tag_id: Id<TagMarker>,
+}
+
 lazy_static! {
-    pub static ref TOKEN: String = get_env("TOKEN");
-    pub static ref HELP_CHANNEL_ID: Id<ChannelMarker> = get_env_id("HELP_CHANNEL_ID");
-    pub static ref UNSOLVED_TAG_ID: Id<TagMarker> = get_env_id("UNSOLVED_TAG_ID");
-    pub static ref SOLVED_TAG_ID: Id<TagMarker> = get_env_id("SOLVED_TAG_ID");
+    pub static ref CONFIG: BotConfig = BotConfig {
+        token: get_env("TOKEN"),
+        help_channel_id: get_env_id("HELP_CHANNEL_ID"),
+        unsolved_tag_id: get_env_id("UNSOLVED_TAG_ID"),
+        solved_tag_id: get_env_id("SOLVED_TAG_ID"),
+    };
 }

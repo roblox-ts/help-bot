@@ -1,4 +1,4 @@
-use crate::events::handle_event;
+use crate::{config::CONFIG, events::handle_event};
 use anyhow::Result;
 use dotenv::dotenv;
 use futures::StreamExt;
@@ -14,18 +14,15 @@ mod server;
 #[tokio::main]
 async fn main() -> Result<()> {
     dotenv().ok();
-    lazy_static::initialize(&config::TOKEN);
-    lazy_static::initialize(&config::HELP_CHANNEL_ID);
-    lazy_static::initialize(&config::UNSOLVED_TAG_ID);
-    lazy_static::initialize(&config::SOLVED_TAG_ID);
+    lazy_static::initialize(&CONFIG);
 
     println!("Starting server..");
     tokio::spawn(server::start_server());
 
-    let client = Arc::new(Client::new(config::TOKEN.to_string()));
+    let client = Arc::new(Client::new(CONFIG.token.to_string()));
 
     let (shard, mut events) = Shard::new(
-        config::TOKEN.to_string(),
+        CONFIG.token.to_string(),
         Intents::GUILDS | Intents::GUILD_MESSAGES | Intents::MESSAGE_CONTENT,
     );
 
