@@ -4,7 +4,7 @@ use std::sync::Arc;
 use twilight_http::Client;
 use twilight_model::channel::Channel;
 
-pub async fn process_thread(client: Arc<Client>, channel: Channel) -> Result<()> {
+pub async fn process_thread(client: Arc<Client>, channel: &Channel) -> Result<()> {
     if Some(CONFIG.help_channel_id) != channel.parent_id {
         return Ok(());
     }
