@@ -633,6 +633,7 @@ dependencies = [
  "dotenv",
  "futures",
  "hyper",
+ "lazy_static",
  "regex",
  "tokio",
  "twilight-gateway",

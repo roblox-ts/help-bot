@@ -1,46 +1,28 @@
-use crate::events::handle_event;
-use anyhow::{Context, Result};
-use config::BotConfig;
+use crate::{config::CONFIG, events::handle_event};
+use anyhow::Result;
 use dotenv::dotenv;
 use futures::StreamExt;
 use std::sync::Arc;
 use twilight_gateway::{Intents, Shard};
 use twilight_http::Client;
-use twilight_model::id::Id;
 
 mod config;
 mod events;
+mod jobs;
 mod server;
-
-fn get_env(name: &str) -> Result<String> {
-    std::env::var(name).context(format!(
-        "Unable to find environment variable named \"{name}\"!"
-    ))
-}
-
-fn get_env_id<T>(name: &str) -> Result<Id<T>> {
-    Ok(Id::new(get_env(name)?.parse::<u64>()?))
-}
 
 #[tokio::main]
 async fn main() -> Result<()> {
     dotenv().ok();
-
-    let token = get_env("TOKEN")?;
-
-    let config = BotConfig {
-        help_channel_id: get_env_id("HELP_CHANNEL_ID")?,
-        unsolved_tag_id: get_env_id("UNSOLVED_TAG_ID")?,
-        solved_tag_id: get_env_id("SOLVED_TAG_ID")?,
-    };
+    lazy_static::initialize(&CONFIG);
 
     println!("Starting server..");
     tokio::spawn(server::start_server());
 
-    let client = Arc::new(Client::new(token.to_string()));
+    let client = Arc::new(Client::new(CONFIG.token.to_string()));
 
     let (shard, mut events) = Shard::new(
-        token.to_string(),
+        CONFIG.token.to_string(),
         Intents::GUILDS | Intents::GUILD_MESSAGES | Intents::MESSAGE_CONTENT,
     );
 
@@ -51,7 +33,7 @@ async fn main() -> Result<()> {
     println!("Shard connected!");
 
     while let Some(event) = events.next().await {
-        tokio::spawn(handle_event(client.clone(), config, event));
+        tokio::spawn(handle_event(client.clone(), event));
     }
 
     println!("Shard disconnected :(");
