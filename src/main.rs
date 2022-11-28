@@ -14,6 +14,10 @@ mod server;
 #[tokio::main]
 async fn main() -> Result<()> {
     dotenv().ok();
+    lazy_static::initialize(&config::TOKEN);
+    lazy_static::initialize(&config::HELP_CHANNEL_ID);
+    lazy_static::initialize(&config::UNSOLVED_TAG_ID);
+    lazy_static::initialize(&config::SOLVED_TAG_ID);
 
     println!("Starting server..");
     tokio::spawn(server::start_server());
