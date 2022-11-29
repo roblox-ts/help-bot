@@ -3,9 +3,7 @@ use lazy_static::lazy_static;
 use regex::Regex;
 use std::sync::Arc;
 use twilight_http::Client;
-use twilight_model::{
-    channel::message::AllowedMentions, gateway::payload::incoming::MessageCreate,
-};
+use twilight_model::gateway::payload::incoming::MessageCreate;
 use twilight_util::builder::embed::EmbedBuilder;
 
 lazy_static! {
