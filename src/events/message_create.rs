@@ -3,7 +3,9 @@ use lazy_static::lazy_static;
 use regex::Regex;
 use std::sync::Arc;
 use twilight_http::Client;
-use twilight_model::gateway::payload::incoming::MessageCreate;
+use twilight_model::{
+    channel::message::AllowedMentions, gateway::payload::incoming::MessageCreate,
+};
 use twilight_util::builder::embed::EmbedBuilder;
 
 lazy_static! {
@@ -27,8 +29,17 @@ pub async fn handle(client: Arc<Client>, event: MessageCreate) -> Result<()> {
 
     let mut message = client.create_message(event.channel_id).embeds(&embeds)?;
 
+    let allowed_mentions = AllowedMentions {
+        parse: vec![],
+        users: vec![],
+        roles: vec![],
+        replied_user: false,
+    };
+
     if let Some(referenced_message) = &event.referenced_message {
-        message = message.reply(referenced_message.id);
+        message = message
+            .reply(referenced_message.id)
+            .allowed_mentions(Some(&allowed_mentions));
     }
 
     message.await?;
