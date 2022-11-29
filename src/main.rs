@@ -23,12 +23,7 @@ async fn main() -> Result<()> {
     let client = Arc::new(
         Client::builder()
             .token(CONFIG.token.to_string())
-            .default_allowed_mentions(AllowedMentions {
-                parse: vec![],
-                roles: vec![],
-                users: vec![],
-                replied_user: false,
-            })
+            .default_allowed_mentions(AllowedMentions::default())
             .build(),
     );
 
