@@ -25,10 +25,13 @@ pub async fn handle(client: Arc<Client>, event: MessageCreate) -> Result<()> {
         .color(0xE2_24_1A)
         .build()];
 
-    client
-        .create_message(event.channel_id)
-        .embeds(&embeds)?
-        .await?;
+    let mut message = client.create_message(event.channel_id).embeds(&embeds)?;
+
+    if let Some(referenced_message) = &event.referenced_message {
+        message = message.reply(referenced_message.id);
+    }
+
+    message.await?;
 
     // only delete the original message if we successfully sent an embed
     client.delete_message(event.channel_id, event.id).await?;
