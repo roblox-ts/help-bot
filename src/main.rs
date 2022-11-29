@@ -5,6 +5,7 @@ use futures::StreamExt;
 use std::sync::Arc;
 use twilight_gateway::{Intents, Shard};
 use twilight_http::Client;
+use twilight_model::channel::message::AllowedMentions;
 
 mod config;
 mod events;
@@ -19,7 +20,17 @@ async fn main() -> Result<()> {
     println!("Starting server..");
     tokio::spawn(server::start_server());
 
-    let client = Arc::new(Client::new(CONFIG.token.to_string()));
+    let client = Arc::new(
+        Client::builder()
+            .token(CONFIG.token.to_string())
+            .default_allowed_mentions(AllowedMentions {
+                parse: vec![],
+                roles: vec![],
+                users: vec![],
+                replied_user: false,
+            })
+            .build(),
+    );
 
     let (shard, mut events) = Shard::new(
         CONFIG.token.to_string(),

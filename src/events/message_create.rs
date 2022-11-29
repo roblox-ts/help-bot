@@ -29,17 +29,8 @@ pub async fn handle(client: Arc<Client>, event: MessageCreate) -> Result<()> {
 
     let mut message = client.create_message(event.channel_id).embeds(&embeds)?;
 
-    let allowed_mentions = AllowedMentions {
-        parse: vec![],
-        users: vec![],
-        roles: vec![],
-        replied_user: false,
-    };
-
     if let Some(referenced_message) = &event.referenced_message {
-        message = message
-            .reply(referenced_message.id)
-            .allowed_mentions(Some(&allowed_mentions));
+        message = message.reply(referenced_message.id);
     }
 
     message.await?;
