@@ -7,26 +7,10 @@ use axum::{
 use hyper::{client::HttpConnector, Body};
 use hyper_tls::HttpsConnector;
 use lazy_static::lazy_static;
-use serde::Deserialize;
 use std::collections::HashSet;
 use std::net::SocketAddr;
 
 type Client = hyper::client::Client<HttpsConnector<HttpConnector>, Body>;
-
-#[derive(Deserialize)]
-struct User {
-    login: String,
-}
-
-#[derive(Deserialize)]
-struct PullRequest {
-    user: User,
-}
-
-#[derive(Deserialize)]
-struct Webhook {
-    pull_request: PullRequest,
-}
 
 lazy_static! {
     static ref BANNED_SET: HashSet<String> = {
@@ -34,6 +18,30 @@ lazy_static! {
         set.insert("dependabot[bot]".to_string());
         set
     };
+}
+
+fn find_pr_author(value: &serde_json::Value) -> Option<String> {
+    value
+        .as_object()?
+        .get("pull_request")?
+        .as_object()?
+        .get("user")?
+        .as_object()?
+        .get("login")?
+        .as_str()
+        .map(|v| v.to_string())
+}
+
+fn find_head_commit_author(value: &serde_json::Value) -> Option<String> {
+    value
+        .as_object()?
+        .get("head_commit")?
+        .as_object()?
+        .get("author")?
+        .as_object()?
+        .get("name")?
+        .as_str()
+        .map(|v| v.to_string())
 }
 
 async fn webhook_handler(State(client): State<Client>, mut req: Request<Body>) -> Response<Body> {
@@ -49,11 +57,20 @@ async fn webhook_handler(State(client): State<Client>, mut req: Request<Body>) -
     *req.uri_mut() = Uri::try_from(uri).unwrap();
 
     let bytes = hyper::body::to_bytes(req.body_mut()).await.unwrap();
+    let parsed: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
 
-    if let Ok(webhook) = serde_json::from_slice::<Webhook>(&bytes) {
-        if BANNED_SET.contains(&webhook.pull_request.user.login) {
-            return Response::builder().body(Body::empty()).unwrap();
-        }
+    if find_pr_author(&parsed)
+        .filter(|v| BANNED_SET.contains(v))
+        .is_some()
+    {
+        return Response::builder().body(Body::empty()).unwrap();
+    }
+
+    if find_head_commit_author(&parsed)
+        .filter(|v| BANNED_SET.contains(v))
+        .is_some()
+    {
+        return Response::builder().body(Body::empty()).unwrap();
     }
 
     *req.body_mut() = Body::from(bytes);
