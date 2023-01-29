@@ -41,7 +41,7 @@ async fn webhook_handler(State(client): State<Client>, mut req: Request<Body>) -
         .uri()
         .path_and_query()
         .map(|v| v.as_str())
-        .unwrap_or(req.uri().path());
+        .unwrap_or_else(|| req.uri().path());
 
     let uri = format!("https://discord.com{path_query}");
 
