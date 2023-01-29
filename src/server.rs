@@ -14,6 +14,6 @@ pub async fn start_server() {
 
     // Run this server for... forever!
     if let Err(e) = server.await {
-        eprintln!("Server error: {}", e);
+        eprintln!("Server error: {e}");
     }
 }
