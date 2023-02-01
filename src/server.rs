@@ -87,7 +87,7 @@ pub async fn start_server() {
     let client = hyper::Client::builder().build::<_, hyper::Body>(https);
 
     let app = Router::new()
-        .route("/", get(hello_world))
+        .route("/health", get(hello_world))
         .route("/api/webhooks/*etc", post(webhook_handler))
         .with_state(client);
 
