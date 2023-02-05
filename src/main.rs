@@ -10,15 +10,11 @@ use twilight_model::channel::message::AllowedMentions;
 mod config;
 mod events;
 mod jobs;
-mod server;
 
 #[tokio::main]
 async fn main() -> Result<()> {
     dotenv().ok();
     lazy_static::initialize(&CONFIG);
-
-    println!("Starting server..");
-    tokio::spawn(server::start_server());
 
     let client = Arc::new(
         Client::builder()
