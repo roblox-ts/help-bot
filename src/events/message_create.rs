@@ -41,7 +41,7 @@ pub async fn handle(client: Arc<Client>, event: MessageCreate) -> Result<()> {
             //     name: (String::from("wastebasket")),
             // }),
             emoji: None,
-            label: Some(format!("Delete ({} only)", event.author.name)),
+            label: Some(String::from("Delete")),
             style: ButtonStyle::Danger,
             url: None,
         })]),
