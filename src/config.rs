@@ -31,6 +31,6 @@ lazy_static! {
         help_channel_id: get_env_id("HELP_CHANNEL_ID"),
         unsolved_tag_id: get_env_id("UNSOLVED_TAG_ID"),
         solved_tag_id: get_env_id("SOLVED_TAG_ID"),
-        application_id: get_env_id("SOLVED_TAG_ID"),
+        application_id: get_env_id("APPLICATION_ID"),
     };
 }
