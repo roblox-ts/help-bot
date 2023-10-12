@@ -37,10 +37,9 @@ pub async fn handle(client: Arc<Client>, event: MessageCreate) -> Result<()> {
         components: Vec::from([Component::Button(Button {
             custom_id: Some(String::from(DELETE_BUTTON_ID)),
             disabled: false,
-            // emoji: Some(ReactionType::Unicode {
-            //     name: (String::from("wastebasket")),
-            // }),
-            emoji: None,
+            emoji: Some(ReactionType::Unicode {
+                name: (String::from("🗑")),
+            }),
             label: Some(String::from("Delete")),
             style: ButtonStyle::Danger,
             url: None,
