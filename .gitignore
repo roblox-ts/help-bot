@@ -1,6 +1,4 @@
-/target
-config.json
+/node_modules
 .env
 .vscode/settings.json
-/rest
 .DS_Store
