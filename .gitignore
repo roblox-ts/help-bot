@@ -3,3 +3,4 @@ config.json
 .env
 .vscode/settings.json
 /rest
+.DS_Store
