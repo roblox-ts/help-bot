@@ -3,7 +3,7 @@ import { HELP_CHANNEL_ID, SOLVED_TAG_ID, UNSOLVED_TAG_ID } from "../constants";
 import log from "@osyris/log";
 
 export async function processThread(channel: Discord.AnyThreadChannel) {
-	if (HELP_CHANNEL_ID !== channel.parentId) return;
+	if (channel.parentId !== HELP_CHANNEL_ID) return;
 
 	// force fetch latest data (including tags)
 	channel = await channel.fetch();
