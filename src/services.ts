@@ -6,4 +6,10 @@ export const discord = new Discord.Client({
 		Discord.GatewayIntentBits.GuildMessages,
 		Discord.GatewayIntentBits.MessageContent,
 	],
+	allowedMentions: {
+		parse: [],
+		roles: [],
+		users: [],
+		repliedUser: false,
+	},
 });

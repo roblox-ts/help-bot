@@ -20,7 +20,6 @@ export default createDiscordEventListener({
 					color: 0xe2_24_1a,
 				},
 			],
-			flags: Discord.MessageFlags.SuppressNotifications,
 		});
 
 		await event.delete();
